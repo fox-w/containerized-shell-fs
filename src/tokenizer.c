@@ -1,28 +1,14 @@
 #include "tokenizer.h"
 
-
+/*
+tokenize: splits an array of chars as as input into an array of pointers to char arrays, each a different "token"
+args:
+    inputString: char*
+returns:
+    **tokens (pointer to array of tokens, each a char array)
+*/
 char* *tokenize(char* inputString)
 {
-    printf("---tokenizer func---\n");
-    // This function is a placeholder for the actual tokenization logic.
-    // It should split the input_string into tokens based on whitespace and return an array of strings.
-    // An array of strings is just an array of char array pointers char string[]
-    // So we need to create new char arrays for each new string we encounter
-
-    // To start, lets figure out how to get every char until we find whitespace
-    // uint8_t i = 0;
-    // while (inputString[i] != '\0')
-    // {
-    //     printf("%c", inputString[i]);
-    //     i++;
-    //     if (inputString[i] == ' ')
-    //     {
-    //         printf("%c", '\n');
-    //         break;
-    //     }
-    // }
-    
-    // Now, how do we store each of those chars in a char array
     uint8_t i = 0;
     uint8_t charsSinceWhitespace = 0;
     char* *tokens = malloc(sizeof(char*) * 4);
@@ -30,7 +16,9 @@ char* *tokenize(char* inputString)
     uint8_t tokensCap = 4;
     while (inputString[i] != '\0')
     {
+        #ifdef DEBUG
         printf("Input string char is %c\n", inputString[i]);
+        #endif
         if (inputString[i] == ' ' || inputString[i] == '\t' || inputString[i] == '\n')
         {
             if (charsSinceWhitespace > 0)
@@ -40,7 +28,9 @@ char* *tokenize(char* inputString)
                 {
                     tokensCap *= 2;
                     tokens = realloc(tokens, tokensCap * sizeof(char*));
-                    printf("-------------doubled memory of tokens\n");
+                    #ifdef DEBUG
+                    printf("doubled memory of tokens\n");
+                    # endif
                     if (tokens == NULL)
                     {
                         perror("Failed to allocate memory");
@@ -50,7 +40,9 @@ char* *tokenize(char* inputString)
                 // create new mem location with the size of the string and copy the token in
                 tokens[nextOpenTokenIndex] = malloc(sizeof(char) * (charsSinceWhitespace + 1));
                 memcpy(tokens[nextOpenTokenIndex], &inputString[i-charsSinceWhitespace], charsSinceWhitespace);
+                #ifdef DEBUG
                 printf("copied new token %s| into tokens array\n", tokens[nextOpenTokenIndex]);
+                #endif
                 tokens[nextOpenTokenIndex][charsSinceWhitespace] = '\0';
                 // now that the string is copied, increment nextOpenTokenIndex
                 nextOpenTokenIndex++;
@@ -62,7 +54,9 @@ char* *tokenize(char* inputString)
             charsSinceWhitespace++;
         }
         i++;
+        #ifdef DEBUG
         printf("incremented i to %i and token is %c|\n", i, inputString[i]);
+        #endif
     }    
     
     return tokens;  // 

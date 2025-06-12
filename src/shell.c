@@ -1,23 +1,40 @@
+/*
+Date: 06/11/2025
+Author: William Fox
+
+This program establishes functionality for a basic shell that can tokenize inputs and execute commands
+*/
+
+// What does the shell need to do?
+// ✔ Prompt: $
+// ✔ Wait for user input.
+// ✔ Read the input command.
+// ✔ Tokenize the command string into an array of strings.
+// Execute the command using execvp or a similar function.
+// Handle errors if the command fails to execute.
+// Handle built-in commands like 'exit' or 'cd'.
+
 #include <stdio.h>
 
 #include "tokenizer.h"
 
-// TODO test with "my tokenizer works now buddy" because that made it fail for some reason
-
 int main(){
-    // This is a simple C program that does nothing.
-    // It serves as a placeholder for future shell implementation.
 
     char line[200];
 
-    printf("$");
+    printf("$ ");
     fgets(line, sizeof(line), stdin);
-    printf("%s is what you entered bruh\n", line);
+
+    #ifdef DEBUG
+    printf("You entered: %s\n", line);
+    #endif
 
     char* *tokensArr = tokenize(line);
 
+    #ifdef DEBUG
     // add something to print tokens
     int tokenIndex = 0;
+    printf("Tokens:\n");
     while (tokensArr[tokenIndex] != NULL)
     {
         printString(tokensArr[tokenIndex]);
@@ -28,17 +45,8 @@ int main(){
         printf(",");
         tokenIndex++;
     }
+    #endif
     
 
     return 0;
 }
-
-// What does the shell need to do?
-// ✔ Prompt: $
-// ✔ Wait for user input.
-// ✔ Read the input command.
-// Parse the command into arguments.
-// Tokenize the command string into an array of strings.
-// Execute the command using execvp or a similar function.
-// Handle errors if the command fails to execute.
-// Handle built-in commands like 'exit' or 'cd'.
